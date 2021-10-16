@@ -1,0 +1,57 @@
+"Demo documentation"
+scalar _FieldSet
+directive @external on OBJECT | FIELD_DEFINITION
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
+directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
+directive @extends on OBJECT | INTERFACE
+directive @isAuthenticated on FIELD | FIELD_DEFINITION
+directive @hasRole(role: String) on FIELD | FIELD_DEFINITION
+directive @pow(ex: Int!) on FIELD | FIELD_DEFINITION
+directive @uppercase on FIELD | FIELD_DEFINITION
+
+type Query {
+    sum(sumInput: SumInput!): Int! @pow(ex: 3) @isAuthenticated
+    date: DateTime! @hasRole(role: "admin")
+}
+
+type Mutation {
+    createTransaction(accountId: ID!, amount: Int!): Transaction
+}
+
+type Account @key(fields: "id") @extends {
+    id: ID! @external
+    transactions: [Transaction!]!
+}
+
+type Transaction @key(fields: "id") {
+    id: ID!
+    amount: Int!
+    status: TransactionStatus!
+    account: Account!
+    log: [TransactionLog!]
+    createdAt: DateTime!
+}
+
+type TransactionMessageLog {
+    message: String!
+}
+
+type TransactionCodeLog {
+    code: Int!
+}
+
+union TransactionLog = TransactionMessageLog | TransactionCodeLog
+
+input SumInput {
+    x: Int!
+    y: Int!
+}
+
+enum TransactionStatus {
+    IN_PROGRESS
+    SUCCESS
+    FAIL
+}
+
+scalar DateTime

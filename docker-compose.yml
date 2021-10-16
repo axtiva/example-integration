@@ -1,0 +1,56 @@
+version: '2.4'
+services:
+  flexible-graphql-bundle: # symfony integration
+    build:
+      context: .
+    image: flexible-graphql-bundle
+    working_dir: /app
+    command: sh -c 'composer install --no-interaction && php -S 0.0.0.0:8081 public/index.php'
+    volumes:
+      - ./FlexibleGraphqlBundle:/app
+    ports:
+      - 8081:8081
+    depends_on:
+      - postgresql
+
+  no-framework: # integration to self written framework or not supported framework
+    build:
+      context: .
+    image: no-framework
+    working_dir: /app
+    command: sh -c 'composer install --no-interaction && php -S 0.0.0.0:8082 index.php'
+    volumes:
+      - ./NoFramework:/app
+    ports:
+      - 8082:8082
+    depends_on:
+      - postgresql
+
+  apollo-federation: # demo for apollo federation integration
+    image: node:14.16.0-alpine3.13
+    environment:
+      NODE_PATH: /app/node_modules
+    working_dir: /app
+    command: sh -c 'npm install && node index'
+    volumes:
+      - ./ApolloFederation:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - flexible-graphql-bundle
+      - no-framework
+
+  postgresql:
+    image: postgres:13.3-alpine3.14
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: demo
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+      - ./Postgresql/001-create-database.sql:/docker-entrypoint-initdb.d/001-create-database.sql
+
+volumes:
+  postgresql:

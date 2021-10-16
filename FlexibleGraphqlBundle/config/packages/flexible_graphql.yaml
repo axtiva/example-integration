@@ -1,0 +1,41 @@
+flexible_graphql:
+  namespace: App\GraphQL
+  dir: '%kernel.project_dir%/src/GraphQL/'
+  schema_type: federation
+  schema_files: '%kernel.project_dir%/config/graphql/*.graphql'
+  enable_preload: true
+  default_resolver: flexible_graphql.default_resolver
+#  resolvers:
+#    default: flexible_graphql.default_resolver
+#    objects:
+#      Query:
+#        currentUser: App\GraphQL\Resolver\Query\CurrentUser
+#        mod: App\GraphQL\Resolver\Query\Mod
+#        time: App\GraphQL\Resolver\Query\Time
+#        echo: App\GraphQL\Resolver\Query\EchoResolver
+#        print: App\GraphQL\Resolver\Query\EchoResolver
+#        account: App\GraphQL\Resolver\Query\Account
+#        accounts: App\GraphQL\Resolver\Query\Accounts
+#        _service: Phpshka\FlexibleGraphqlBundle\ApolloFederation\ApolloFederationQuery_ServiceResolver
+#      Mutation:
+#        setAmountAccount: App\GraphQL\Resolver\Mutation\SetAmountAccount
+#        createAccount: App\GraphQL\Resolver\Mutation\CreateAccount
+#      Account:
+#        status: App\GraphQL\Resolver\Account\Status
+#        currency: App\GraphQL\Resolver\Account\Currency
+#    directives:
+#      uppercase: Phpshka\FlexibleGraphql\Resolver\Foundation\UppercaseDirectiveResolver
+#      pow: App\GraphQL\Directive\Pow
+#      isAuthenticated: App\GraphQL\Directive\IsAuthenticated
+#      hasRole: App\GraphQL\Directive\HasRole
+#    scalars:
+#      DateTime: Phpshka\FlexibleGraphql\Resolver\Foundation\ScalarDateTimeImmutableResolver
+#      Time: App\GraphQL\Scalar\Time
+#      NotZeroInt: App\GraphQL\Scalar\NotZeroInt
+#    union_resolve_types:
+#      Currency: App\GraphQL\UnionTypeResolver\Currency
+#      _Entity: App\GraphQL\UnionTypeResolver\_Entity
+#    representations:
+#      Account: App\GraphQL\Resolver\Account\Representation
+#      NamedCurrency: App\GraphQL\Resolver\NamedCurrency\Representation
+#      CodedCurrency: App\GraphQL\Resolver\CodedCurrency\Representation

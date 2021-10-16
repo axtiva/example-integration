@@ -1,0 +1,27 @@
+{
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "myclabs/php-enum": "^1.8",
+        "axtiva/flexible-graphql-php": "^0.1",
+        "axtiva/graphql-federation-extension": "^0.1",
+        "axtiva/flexible-graphql-federation": "^0.1",
+        "psr/container": "^2.0",
+        "symfony/uid": "^5.3"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "SelfWritten\\": "."
+        }
+    }
+}

@@ -1,0 +1,68 @@
+"Demo documentation"
+scalar _FieldSet
+directive @external on OBJECT | FIELD_DEFINITION
+directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
+directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
+directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
+directive @extends on OBJECT | INTERFACE
+directive @uppercase on FIELD | FIELD_DEFINITION
+directive @pow(ex: Int!) on FIELD | FIELD_DEFINITION
+directive @isAuthenticated on FIELD | FIELD_DEFINITION
+directive @hasRole(role: String) on FIELD | FIELD_DEFINITION
+
+type Query @extends {
+    currentUser: User
+    mod(input: ModInput!): Int! @pow(ex: 3)
+    echo(input: String!): String! @isAuthenticated
+    print(input: String!): String! @isAuthenticated @deprecated(reason: "Use echo field")
+    time: Time! @hasRole(role: "watcher")
+    account(id: ID!): Account
+    accounts: [Account]
+}
+
+type Mutation @extends {
+    setAmountAccount(idAccount: ID!, amount: Int!): Account
+    createAccount(number: String!): Account
+}
+
+type Account @key(fields: "id") {
+    id: ID!
+    number: String! @uppercase
+    currency: Currency!
+    status: AccountStatus!
+    amount: Int!
+    createdAt: DateTime!
+}
+
+type NamedCurrency @key(fields: "name") {
+    name: String!
+    accounts: [Account!]!
+}
+
+type CodedCurrency @key(fields: "code") {
+    code: Int!
+    accounts: [Account!]!
+}
+
+type User {
+    username: String!
+    role: String!
+}
+
+union Currency = NamedCurrency | CodedCurrency
+
+input ModInput {
+    x: Int!
+    y: NotZeroInt!
+}
+
+enum AccountStatus {
+    ACTIVE
+    BLOCKED
+}
+"Accept not 0 value"
+scalar NotZeroInt
+"Format: HH:MM:SS"
+scalar Time
+"Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000"
+scalar DateTime
