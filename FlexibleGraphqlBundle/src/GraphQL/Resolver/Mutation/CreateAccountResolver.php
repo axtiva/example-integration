@@ -27,7 +27,7 @@ final class CreateAccountResolver implements ResolverInterface
     public function __construct(
         AccountRepository $accountRepository,
         CodedCurrencyRepository $codedCurrencyRepository,
-        NamedCurrencyRepository $namedCurrencyRepository,
+        NamedCurrencyRepository $namedCurrencyRepository
     ) {
         $this->accountRepository = $accountRepository;
         $this->codedCurrencyRepository = $codedCurrencyRepository;
