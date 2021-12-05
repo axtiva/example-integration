@@ -33,7 +33,7 @@ send federated queries to http://localhost:8080/
 Command for generate TypeRegistry
 
 ```
-php FlexibleGraphqlBundle/generate.php
+php bin/console flexible_graphql:generate-type-registry
 ```
 
 Run http server for handle GraphQL requests

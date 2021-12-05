@@ -53,7 +53,9 @@ class TypeRegistry
                         return $this->container->get('SelfWritten\GraphQL\Directive\IsAuthenticatedDirective')(
                         function($rootValue, $args, $context, $info) {
                         return $this->container->get('SelfWritten\GraphQL\Directive\PowDirective')(
-                        $this->container->get('SelfWritten\GraphQL\Resolver\Query\SumResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\SumResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
   'ex' => '3',
 ),
@@ -78,7 +80,9 @@ class TypeRegistry
             'deprecationReason' => NULL,
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('SelfWritten\GraphQL\Directive\HasRoleDirective')(
-                        $this->container->get('SelfWritten\GraphQL\Resolver\Query\DateResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\DateResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
   'role' => 'admin',
 ),
@@ -91,7 +95,9 @@ class TypeRegistry
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('SelfWritten\GraphQL\Resolver\Query\_entitiesResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
             'args' => ['representations' => [
             'name' => 'representations',
@@ -103,7 +109,9 @@ class TypeRegistry
             'name' => '_service',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('SelfWritten\GraphQL\Resolver\Query\_serviceResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
         ])],
@@ -268,7 +276,9 @@ class TypeRegistry
             'name' => 'transactions',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('SelfWritten\GraphQL\Resolver\Account\TransactionsResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Account\TransactionsResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Transaction'); }); }); }); },
             'args' => [],
         ])],
@@ -352,7 +362,9 @@ class TypeRegistry
             'name' => 'createTransaction',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return $this->getType('Transaction'); },
             'args' => ['accountId' => [
             'name' => 'accountId',

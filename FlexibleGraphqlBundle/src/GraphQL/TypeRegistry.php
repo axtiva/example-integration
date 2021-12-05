@@ -49,7 +49,9 @@ class TypeRegistry
             'name' => 'currentUser',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Query\CurrentUserResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\CurrentUserResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return $this->getType('User'); },
             'args' => [],
         ]),'mod' => FieldDefinition::create([
@@ -58,7 +60,9 @@ class TypeRegistry
             'deprecationReason' => NULL,
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\PowDirective')(
-                        $this->container->get('App\GraphQL\Resolver\Query\ModResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\ModResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
   'ex' => '3',
 ),
@@ -78,7 +82,9 @@ class TypeRegistry
             'deprecationReason' => NULL,
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\IsAuthenticatedDirective')(
-                        $this->container->get('App\GraphQL\Resolver\Query\EchoResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\EchoResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
 ),
                         $rootValue, $args, $context, $info
@@ -97,7 +103,9 @@ class TypeRegistry
             'deprecationReason' => 'Use echo field',
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\IsAuthenticatedDirective')(
-                        $this->container->get('App\GraphQL\Resolver\Query\PrintResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\PrintResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
 ),
                         $rootValue, $args, $context, $info
@@ -116,7 +124,9 @@ class TypeRegistry
             'deprecationReason' => NULL,
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\HasRoleDirective')(
-                        $this->container->get('App\GraphQL\Resolver\Query\TimeResolver'), 
+                        (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\TimeResolver')($rootValue, $args, $context, $info);
+}), 
                         array (
   'role' => 'watcher',
 ),
@@ -129,7 +139,9 @@ class TypeRegistry
             'name' => 'account',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Query\AccountResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\AccountResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return $this->getType('Account'); },
             'args' => ['id' => [
             'name' => 'id',
@@ -141,14 +153,18 @@ class TypeRegistry
             'name' => 'accounts',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Query\AccountsResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\AccountsResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return new ListOfType(function() { return $this->getType('Account'); }); },
             'args' => [],
         ]),'_entities' => FieldDefinition::create([
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Query\_entitiesResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
             'args' => ['representations' => [
             'name' => 'representations',
@@ -160,7 +176,9 @@ class TypeRegistry
             'name' => '_service',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Query\_serviceResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
         ])],
@@ -447,7 +465,9 @@ class TypeRegistry
             'name' => 'setAmountAccount',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Mutation\SetAmountAccountResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Mutation\SetAmountAccountResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return $this->getType('Account'); },
             'args' => ['idAccount' => [
             'name' => 'idAccount',
@@ -464,7 +484,9 @@ class TypeRegistry
             'name' => 'createAccount',
             'description' => NULL,
             'deprecationReason' => NULL,
-            'resolve' => $this->container->get('App\GraphQL\Resolver\Mutation\CreateAccountResolver'),
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    return $this->container->get('App\GraphQL\Resolver\Mutation\CreateAccountResolver')($rootValue, $args, $context, $info);
+}),
             'type' => function() { return $this->getType('Account'); },
             'args' => ['number' => [
             'name' => 'number',
