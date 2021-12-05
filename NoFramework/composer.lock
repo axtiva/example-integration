@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c0a3a1c4f65b08455893d060e0d912c",
+    "content-hash": "271c1ee64df48c1b7dacb1effb6bcf2f",
     "packages": [
         {
             "name": "axtiva/flexible-graphql-federation",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axtiva/flexible-graphql-federation.git",
-                "reference": "aa4bea3d5b76d493396e922f2e8e0b8672c7b856"
+                "reference": "9f8b307ef2ec199cdab0c8942c87e8029ac73c80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axtiva/flexible-graphql-federation/zipball/aa4bea3d5b76d493396e922f2e8e0b8672c7b856",
-                "reference": "aa4bea3d5b76d493396e922f2e8e0b8672c7b856",
+                "url": "https://api.github.com/repos/axtiva/flexible-graphql-federation/zipball/9f8b307ef2ec199cdab0c8942c87e8029ac73c80",
+                "reference": "9f8b307ef2ec199cdab0c8942c87e8029ac73c80",
                 "shasum": ""
             },
             "require": {
-                "axtiva/flexible-graphql-php": "^0.1",
+                "axtiva/flexible-graphql-php": "^0.2",
                 "php": ">=7.4"
             },
             "type": "library",
@@ -43,28 +43,28 @@
             "description": "Schema SDL first lib for generate php code from graphql sdl to TypeRegistry with webonyx/graphql-php for apollo federation properties",
             "support": {
                 "issues": "https://github.com/axtiva/flexible-graphql-federation/issues",
-                "source": "https://github.com/axtiva/flexible-graphql-federation/tree/v0.1.0"
+                "source": "https://github.com/axtiva/flexible-graphql-federation/tree/v0.2.0"
             },
-            "time": "2021-10-16T10:25:42+00:00"
+            "time": "2021-12-05T19:19:55+00:00"
         },
         {
             "name": "axtiva/flexible-graphql-php",
-            "version": "v0.1.0",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axtiva/flexible-graphql-php.git",
-                "reference": "b80c33d1eb74a69643f73d665ac385a3c091488f"
+                "reference": "d8c915f77fbc9b1d8f3e30adf1377234aec050b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/b80c33d1eb74a69643f73d665ac385a3c091488f",
-                "reference": "b80c33d1eb74a69643f73d665ac385a3c091488f",
+                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/d8c915f77fbc9b1d8f3e30adf1377234aec050b4",
+                "reference": "d8c915f77fbc9b1d8f3e30adf1377234aec050b4",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.12",
                 "php": ">=7.4",
-                "twig/twig": "^3.0",
+                "twig/twig": "^1.0 | ^2.0 | ^3.0",
                 "webonyx/graphql-php": "^14.0"
             },
             "require-dev": {
@@ -89,9 +89,9 @@
             "description": "Schema SDL first lib for generate php code from graphql sdl to TypeRegistry with webonyx/graphql-php",
             "support": {
                 "issues": "https://github.com/axtiva/flexible-graphql-php/issues",
-                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v0.1.0"
+                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v0.2.3"
             },
-            "time": "2021-10-16T10:17:59+00:00"
+            "time": "2021-12-05T20:10:55+00:00"
         },
         {
             "name": "axtiva/graphql-federation-extension",
@@ -769,5 +769,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
