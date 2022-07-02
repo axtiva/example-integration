@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace SelfWritten\GraphQL\Directive;
 
-use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
@@ -14,6 +13,15 @@ use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
  */
 final class IsAuthenticatedDirective implements DirectiveResolverInterface
 {
+    /**
+     * @param callable $next
+     * @param $directiveArgs
+     * @param $rootValue
+     * @param $args
+     * @param $context
+     * @param ResolveInfo $info
+     * @return mixed
+     */
     public function __invoke(callable $next, $directiveArgs, $rootValue, $args, $context, ResolveInfo $info)
     {
         $user = $context->getUser();

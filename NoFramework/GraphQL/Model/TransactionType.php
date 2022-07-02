@@ -17,6 +17,9 @@ final class TransactionType implements AutoGenerationInterface, _EntityInterface
     public int $amount;
     public TransactionStatusEnum $status;
     public AccountType $account;
-    public ?array $log = null;
+    /**
+     * @var null|iterable
+     */
+    public ?iterable $log = null;
     public $createdAt;
 }

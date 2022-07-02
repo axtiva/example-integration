@@ -54,11 +54,12 @@ class TypeRegistry
                         function($rootValue, $args, $context, $info) {
                         return $this->container->get('SelfWritten\GraphQL\Directive\PowDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    $args = new \SelfWritten\GraphQL\ResolverArgs\Query\SumResolverArgs($args);
     return $this->container->get('SelfWritten\GraphQL\Resolver\Query\SumResolver')($rootValue, $args, $context, $info);
 }), 
-                        array (
+                        new \SelfWritten\GraphQL\DirectiveArgs\PowDirectiveArgs(array (
   'ex' => '3',
-),
+)),
                         $rootValue, $args, $context, $info
                         );
                     }, 
@@ -81,21 +82,33 @@ class TypeRegistry
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('SelfWritten\GraphQL\Directive\HasRoleDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    
     return $this->container->get('SelfWritten\GraphQL\Resolver\Query\DateResolver')($rootValue, $args, $context, $info);
 }), 
-                        array (
+                        new \SelfWritten\GraphQL\DirectiveArgs\HasRoleDirectiveArgs(array (
   'role' => 'admin',
-),
+)),
                         $rootValue, $args, $context, $info
                         );
                     },
             'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
+            'args' => [],
+        ]),'_service' => FieldDefinition::create([
+            'name' => '_service',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
         ]),'_entities' => FieldDefinition::create([
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \SelfWritten\GraphQL\ResolverArgs\Query\_entitiesResolverArgs($args);
     return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
@@ -105,15 +118,6 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'_service' => FieldDefinition::create([
-            'name' => '_service',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
-            'args' => [],
         ])],
         ]);
             }
@@ -146,11 +150,27 @@ class TypeRegistry
                 return new CustomScalarType([
             'name' => 'DateTime',
             'description' => NULL,
-            
             'serialize' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
             'parseValue' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
             'parseLiteral' => function($value, $variables) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
-            
+        ]);
+            }
+        
+
+
+            public function _Service()
+            {
+                return new ObjectType([
+            'name' => '_Service',
+            'description' => NULL,
+            'fields' => fn() => ['sdl' => FieldDefinition::create([
+            'name' => 'sdl',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'args' => [],
+        ])],
         ]);
             }
         
@@ -161,7 +181,7 @@ class TypeRegistry
                 return new CustomScalarType([
             'name' => '_Any',
             'description' => NULL,
-            
+
         ]);
             }
         
@@ -277,6 +297,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    
     return $this->container->get('SelfWritten\GraphQL\Resolver\Account\TransactionsResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Transaction'); }); }); }); },
@@ -335,24 +356,6 @@ class TypeRegistry
         
 
 
-            public function _Service()
-            {
-                return new ObjectType([
-            'name' => '_Service',
-            'description' => NULL,
-            'fields' => fn() => ['sdl' => FieldDefinition::create([
-            'name' => 'sdl',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'args' => [],
-        ])],
-        ]);
-            }
-        
-
-
             public function Mutation()
             {
                 return new ObjectType([
@@ -363,6 +366,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \SelfWritten\GraphQL\ResolverArgs\Mutation\CreateTransactionResolverArgs($args);
     return $this->container->get('SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return $this->getType('Transaction'); },
@@ -388,7 +392,7 @@ class TypeRegistry
                 return new CustomScalarType([
             'name' => '_FieldSet',
             'description' => 'Demo documentation',
-            
+
         ]);
             }
         
