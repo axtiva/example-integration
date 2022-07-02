@@ -11,6 +11,7 @@ use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\Federation
 use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\CodeGeneratorConfig;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\FieldResolverGeneratorConfig;
+use Axtiva\FlexibleGraphql\Generator\Config\LanguageLevelConfigInterface;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\BuildSchema;
 use SelfWritten\Container\Container;
@@ -34,6 +35,7 @@ $dir = __DIR__ . '/../GraphQL';
 
 $config = new CodeGeneratorConfig(
     $dir,
+    LanguageLevelConfigInterface::V7_4,
     $namespace
 );
 
@@ -44,13 +46,13 @@ return new Container([
     CodeGeneratorBuilderInterface::class => (function() use ($config) {
         $fieldResolverConfig = new FieldResolverGeneratorConfig($config);
         $federationRepresentationResolverConfig = new FederationRepresentationResolverGeneratorConfig($config);
-        $builder = new CodeGeneratorBuilder($config->getCodeDirPath(), $config->getCodeNamespace());
+        $builder = new CodeGeneratorBuilder($config);
         $builder->addFieldResolverGenerator(new _EntitiesResolverGenerator($fieldResolverConfig));
         $builder->addFieldResolverGenerator(new _ServiceResolverGenerator($fieldResolverConfig));
         $builder->addModelGenerator(new FederationRepresentationResolverGenerator($federationRepresentationResolverConfig));
         return $builder;
     })(),
-    TypeRegistryGeneratorBuilderInterface::class => new TypeRegistryGeneratorBuilder($config->getCodeDirPath(), $config->getCodeNamespace()),
+    TypeRegistryGeneratorBuilderInterface::class => new TypeRegistryGeneratorBuilder($config),
     CreateTransactionResolver::class => new CreateTransactionResolver(),
     DateTimeScalar::class => new DateTimeScalar(),
     DateResolver::class => new DateResolver(),

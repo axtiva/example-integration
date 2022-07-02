@@ -3,10 +3,7 @@
 namespace SelfWritten;
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
-use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Schema;
-use GraphQL\Utils\BuildSchema;
 use Psr\Container\ContainerInterface;
 
 // execute in shell command on project root dir: composer install
@@ -19,7 +16,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 /** @var ContainerInterface $container */
 $container = require __DIR__ . '/Container/get_container.php';
 
-$directiveName = 'undefined';
+$directiveName = 'set_directive_name_here';
 
 $schema = $container->get(Schema::class);
 
@@ -27,4 +24,9 @@ $schema = $container->get(Schema::class);
 $codeBuilder = $container->get(CodeGeneratorBuilderInterface::class);
 
 $codeGenerator = $codeBuilder->build();
-$codeGenerator->generateDirectiveResolver($schema->getDirective($directiveName), $schema);
+$directive = $schema->getDirective($directiveName);
+if ($directive === null) {
+    throw new \RuntimeException('Directive not found ' . $directiveName);
+}
+
+foreach ($codeGenerator->generateDirectiveResolver($schema->getDirective($directiveName), $schema) as $code);

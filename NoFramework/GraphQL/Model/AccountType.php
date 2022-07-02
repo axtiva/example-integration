@@ -14,5 +14,8 @@ use Axtiva\FlexibleGraphql\Resolver\AutoGenerationInterface;
 final class AccountType implements AutoGenerationInterface, _EntityInterface
 {
     public string $id;
-    public array $transactions;
+    /**
+     * @var iterable
+     */
+    public iterable $transactions;
 }
