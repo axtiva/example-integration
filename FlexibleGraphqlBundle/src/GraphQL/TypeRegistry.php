@@ -50,6 +50,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    
     return $this->container->get('App\GraphQL\Resolver\Query\CurrentUserResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return $this->getType('User'); },
@@ -61,6 +62,7 @@ class TypeRegistry
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\PowDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\ModResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Query\ModResolver')($rootValue, $args, $context, $info);
 }), 
                         array (
@@ -83,6 +85,7 @@ class TypeRegistry
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\IsAuthenticatedDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\EchoResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Query\EchoResolver')($rootValue, $args, $context, $info);
 }), 
                         array (
@@ -104,6 +107,7 @@ class TypeRegistry
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\IsAuthenticatedDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\PrintResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Query\PrintResolver')($rootValue, $args, $context, $info);
 }), 
                         array (
@@ -118,6 +122,21 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
+        ]),'dayTime' => FieldDefinition::create([
+            'name' => 'dayTime',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\DayTimeResolverArgs($args);
+    return $this->container->get('App\GraphQL\Resolver\Query\DayTimeResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return new ListOfType(function() { return $this->getType('DateTime'); }); },
+            'args' => ['timestamps' => [
+            'name' => 'timestamps',
+            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('TimestampInput'); }); }); }); }); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]],
         ]),'time' => FieldDefinition::create([
             'name' => 'time',
             'description' => NULL,
@@ -125,6 +144,7 @@ class TypeRegistry
             'resolve' => function($rootValue, $args, $context, $info) {
                         return $this->container->get('App\GraphQL\Directive\HasRoleDirective')(
                         (function ($rootValue, $args, $context, $info) {
+    
     return $this->container->get('App\GraphQL\Resolver\Query\TimeResolver')($rootValue, $args, $context, $info);
 }), 
                         array (
@@ -140,6 +160,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\AccountResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Query\AccountResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return $this->getType('Account'); },
@@ -154,15 +175,27 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    
     return $this->container->get('App\GraphQL\Resolver\Query\AccountsResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return new ListOfType(function() { return $this->getType('Account'); }); },
+            'args' => [],
+        ]),'_service' => FieldDefinition::create([
+            'name' => '_service',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    
+    return $this->container->get('App\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
         ]),'_entities' => FieldDefinition::create([
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Query\_entitiesResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
@@ -172,15 +205,6 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'_service' => FieldDefinition::create([
-            'name' => '_service',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    return $this->container->get('App\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
-            'args' => [],
         ])],
         ]);
             }
@@ -238,11 +262,38 @@ class TypeRegistry
                 return new CustomScalarType([
             'name' => 'NotZeroInt',
             'description' => 'Accept not 0 value',
-            
             'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->serialize($value);},
             'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseValue($value);},
             'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseLiteral($value, $variables);},
-            
+        ]);
+            }
+        
+
+
+            public function TimestampInput()
+            {
+                return new InputObjectType([
+        'name' => 'TimestampInput',
+        'description' =>  NULL,
+        'fields' => fn() => ['ts' => [
+            'name' => 'ts',
+            'description' => NULL,
+            'defaultValue' => NULL,
+            'type' => Type::nonNull(function() { return Type::int(); }),
+        ]],
+        ]);
+            }
+        
+
+
+            public function DateTime()
+            {
+                return new CustomScalarType([
+            'name' => 'DateTime',
+            'description' => 'Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000',
+            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
+            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
+            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
         ]);
             }
         
@@ -253,11 +304,9 @@ class TypeRegistry
                 return new CustomScalarType([
             'name' => 'Time',
             'description' => 'Format: HH:MM:SS',
-            
             'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->serialize($value);},
             'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseValue($value);},
             'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseLiteral($value, $variables);},
-            
         ]);
             }
         
@@ -400,44 +449,6 @@ class TypeRegistry
         
 
 
-            public function DateTime()
-            {
-                return new CustomScalarType([
-            'name' => 'DateTime',
-            'description' => 'Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000',
-            
-            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
-            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
-            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
-            
-        ]);
-            }
-        
-
-
-            public function _Any()
-            {
-                return new CustomScalarType([
-            'name' => '_Any',
-            'description' => NULL,
-            
-        ]);
-            }
-        
-
-
-            public function _Entity()
-            {
-                return new UnionType([
-            'name' => '_Entity',
-            'description' => NULL,
-            'types' => function() { return [$this->getType('Account'),$this->getType('NamedCurrency'),$this->getType('CodedCurrency')];},
-            'resolveType' => $this->container->get('App\GraphQL\UnionResolveType\_EntityTypeResolver'),
-        ]);
-            }
-        
-
-
             public function _Service()
             {
                 return new ObjectType([
@@ -456,6 +467,29 @@ class TypeRegistry
         
 
 
+            public function _Any()
+            {
+                return new CustomScalarType([
+            'name' => '_Any',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
+            public function _Entity()
+            {
+                return new UnionType([
+            'name' => '_Entity',
+            'description' => NULL,
+            'types' => function() { return [$this->getType('Account'),$this->getType('NamedCurrency'),$this->getType('CodedCurrency')];},
+            'resolveType' => $this->container->get('App\GraphQL\UnionResolveType\_EntityTypeResolver'),
+        ]);
+            }
+        
+
+
             public function Mutation()
             {
                 return new ObjectType([
@@ -466,6 +500,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Mutation\SetAmountAccountResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Mutation\SetAmountAccountResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return $this->getType('Account'); },
@@ -485,6 +520,7 @@ class TypeRegistry
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Mutation\CreateAccountResolverArgs($args);
     return $this->container->get('App\GraphQL\Resolver\Mutation\CreateAccountResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return $this->getType('Account'); },
@@ -500,14 +536,87 @@ class TypeRegistry
         
 
 
-            public function _FieldSet()
+            public function link__Purpose()
             {
-                return new CustomScalarType([
-            'name' => '_FieldSet',
-            'description' => 'Demo documentation',
-            
+                return new EnumType([
+        'name' => 'link__Purpose',
+        'description' => NULL,
+        'values' => ['SECURITY' => [
+            'name' => 'SECURITY', 
+            'value' => 'SECURITY',
+            'description' => '`SECURITY` features provide metadata necessary to securely resolve fields.',
+            'deprecationReason' => NULL,
+            ],
+'EXECUTION' => [
+            'name' => 'EXECUTION', 
+            'value' => 'EXECUTION',
+            'description' => '`EXECUTION` features provide metadata necessary for operation execution.',
+            'deprecationReason' => NULL,
+            ]],
         ]);
             }
+        
+
+
+            public function link__Import()
+            {
+                return new CustomScalarType([
+            'name' => 'link__Import',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
+            public function FieldSet()
+            {
+                return new CustomScalarType([
+            'name' => 'FieldSet',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
+    public function directive_link()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'link',
+            'description' => 'Apollo federation directives',
+            'isRepeatable' => true,
+            'locations' => ['SCHEMA'],
+            'args' => [
+                [
+            'name' => 'url',
+            'type' => function() { return Type::string(); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'as',
+            'type' => function() { return Type::string(); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'for',
+            'type' => function() { return $this->getType('link__Purpose'); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'import',
+            'type' => function() { return new ListOfType(function() { return $this->getType('link__Import'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
         
 
 
@@ -519,7 +628,7 @@ class TypeRegistry
             'name' => 'external',
             'description' => NULL,
             'isRepeatable' => false,
-            'locations' => ['OBJECT','FIELD_DEFINITION'],
+            'locations' => ['FIELD_DEFINITION'],
             'args' => [
                 
             ],
@@ -543,7 +652,7 @@ class TypeRegistry
             'args' => [
                 [
             'name' => 'fields',
-            'type' => function() { return Type::nonNull(function() { return $this->getType('_FieldSet'); }); },
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
             'defaultValue' => NULL,
             'description' => NULL,
         ]
@@ -568,7 +677,7 @@ class TypeRegistry
             'args' => [
                 [
             'name' => 'fields',
-            'type' => function() { return Type::nonNull(function() { return $this->getType('_FieldSet'); }); },
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
             'defaultValue' => NULL,
             'description' => NULL,
         ]
@@ -588,12 +697,82 @@ class TypeRegistry
             $directive = new Directive([
             'name' => 'key',
             'description' => NULL,
-            'isRepeatable' => false,
+            'isRepeatable' => true,
             'locations' => ['OBJECT','INTERFACE'],
             'args' => [
                 [
             'name' => 'fields',
-            'type' => function() { return Type::nonNull(function() { return $this->getType('_FieldSet'); }); },
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'resolvable',
+            'type' => function() { return Type::boolean(); },
+            'defaultValue' => true,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_shareable()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'shareable',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['OBJECT','FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_inaccessible()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'inaccessible',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION','OBJECT','INTERFACE','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_override()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'override',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'from',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
             'defaultValue' => NULL,
             'description' => NULL,
         ]
@@ -718,7 +897,7 @@ class TypeRegistry
 
     public function getDirectives()
     {
-        return [$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_extends(),$this->directive_uppercase(),$this->directive_pow(),$this->directive_isAuthenticated(),$this->directive_hasRole()];
+        return [$this->directive_link(),$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_shareable(),$this->directive_inaccessible(),$this->directive_override(),$this->directive_extends(),$this->directive_uppercase(),$this->directive_pow(),$this->directive_isAuthenticated(),$this->directive_hasRole()];
     }
         
 

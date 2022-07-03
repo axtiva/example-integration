@@ -1,12 +1,15 @@
-const { ApolloGateway, RemoteGraphQLDataSource} = require("@apollo/gateway");
+const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource} = require("@apollo/gateway");
 const { ApolloServer } = require('apollo-server');
 
 const gateway = new ApolloGateway({
     debug: true,
-    serviceList: [
-        { name: 'flexible-graphql-bundle', url: 'http://flexible-graphql-bundle:8081/' },
-        { name: 'no-framework', url: 'http://no-framework:8082/' },
-    ],
+    supergraphSdl: new IntrospectAndCompose({
+        subgraphs: [
+            { name: 'flexible-graphql-bundle', url: 'http://flexible-graphql-bundle:8081/' },
+            { name: 'no-framework', url: 'http://no-framework:8082/' },
+        ],
+        pollIntervalInMs: 10000,
+    }),
     buildService({name, url}) {
         return new RemoteGraphQLDataSource({
             url,
