@@ -1,10 +1,23 @@
-"Demo documentation"
-scalar _FieldSet
-directive @external on OBJECT | FIELD_DEFINITION
-directive @requires(fields: _FieldSet!) on FIELD_DEFINITION
-directive @provides(fields: _FieldSet!) on FIELD_DEFINITION
-directive @key(fields: _FieldSet!) on OBJECT | INTERFACE
+"Apollo federation directives"
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+enum link__Purpose {
+    "`SECURITY` features provide metadata necessary to securely resolve fields."
+    SECURITY
+    "`EXECUTION` features provide metadata necessary for operation execution."
+    EXECUTION
+}
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@extends", "@external", "@requires", "@provides", "@shareable", "@override", "FieldSet"])
+scalar FieldSet
+scalar link__Import
+directive @external on FIELD_DEFINITION
+directive @requires(fields: FieldSet!) on FIELD_DEFINITION
+directive @provides(fields: FieldSet!) on FIELD_DEFINITION
+directive @key(fields: FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+directive @shareable on OBJECT | FIELD_DEFINITION
+directive @inaccessible on FIELD_DEFINITION | OBJECT | INTERFACE | UNION | ARGUMENT_DEFINITION | SCALAR | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
+directive @override(from: String!) on FIELD_DEFINITION
 directive @extends on OBJECT | INTERFACE
+
 directive @isAuthenticated on FIELD | FIELD_DEFINITION
 directive @hasRole(role: String) on FIELD | FIELD_DEFINITION
 directive @pow(ex: Int!) on FIELD | FIELD_DEFINITION
@@ -13,6 +26,7 @@ directive @uppercase on FIELD | FIELD_DEFINITION
 type Query {
     sum(sumInput: SumInput!): Int! @pow(ex: 3) @isAuthenticated
     date: DateTime! @hasRole(role: "admin")
+    dayTime(timestamps: [[TimestampInput!]!]!): [DateTime] @shareable
 }
 
 type Mutation {
@@ -46,6 +60,10 @@ union TransactionLog = TransactionMessageLog | TransactionCodeLog
 input SumInput {
     x: Int!
     y: Int!
+}
+
+input TimestampInput {
+    ts: Int!
 }
 
 enum TransactionStatus {

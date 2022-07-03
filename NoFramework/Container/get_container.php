@@ -25,6 +25,7 @@ use SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver;
 use SelfWritten\GraphQL\Resolver\Query\_entitiesResolver;
 use SelfWritten\GraphQL\Resolver\Query\_serviceResolver;
 use SelfWritten\GraphQL\Resolver\Query\DateResolver;
+use SelfWritten\GraphQL\Resolver\Query\DayTimeResolver;
 use SelfWritten\GraphQL\Resolver\Query\SumResolver;
 use SelfWritten\GraphQL\Scalar\DateTimeScalar;
 use SelfWritten\GraphQL\UnionResolveType\_EntityTypeResolver;
@@ -61,6 +62,7 @@ return new Container([
     IsAuthenticatedDirective::class => new IsAuthenticatedDirective(),
     PowDirective::class => new PowDirective(),
     TransactionsResolver::class => new TransactionsResolver(),
+    DayTimeResolver::class => new DayTimeResolver(),
     _EntityTypeResolver::class => new _EntityTypeResolver(),
     TransactionLogTypeResolver::class => new TransactionLogTypeResolver(),
     _entitiesResolver::class => new _entitiesResolver(...[new AccountRepresentation(), new TransactionRepresentation()]),

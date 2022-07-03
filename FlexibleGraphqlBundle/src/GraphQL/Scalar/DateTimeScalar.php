@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace App\GraphQL\Scalar;
 
+use Axtiva\FlexibleGraphql\Resolver\TypedCustomScalarResolverInterface;
 use DateTimeImmutable;
 use GraphQL\Language\AST\Node;
 use Axtiva\FlexibleGraphql\Resolver\CustomScalarResolverInterface;
@@ -13,11 +14,11 @@ use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
  * This is resolver for scalar DateTime
  * Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000
  */
-final class DateTimeScalar implements CustomScalarResolverInterface
+final class DateTimeScalar implements TypedCustomScalarResolverInterface
 {
     public function serialize($value)
     {
-        return $value->format(DateTimeImmutable::ISO8601);
+        return $value->format(DateTimeImmutable::RFC3339);
     }
 
     public function parseValue($value)
@@ -28,5 +29,10 @@ final class DateTimeScalar implements CustomScalarResolverInterface
     public function parseLiteral(Node $value, ?array $variables = null)
     {
         return $value->value ? new DateTimeImmutable((string) $value->value) : null;
+    }
+
+    public static function getTypeName(): ?string
+    {
+        return DateTimeImmutable::class;
     }
 }

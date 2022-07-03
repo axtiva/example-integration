@@ -14,5 +14,8 @@ use Axtiva\FlexibleGraphql\Resolver\AutoGenerationInterface;
 final class NamedCurrencyType implements AutoGenerationInterface, CurrencyInterface, _EntityInterface
 {
     public string $name;
-    public array $accounts;
+    /**
+     * @var iterable
+     */
+    public iterable $accounts;
 }
