@@ -92,7 +92,7 @@ curl --request POST \
 
 ##### GraphQL
 
-```
+```graphql
 query{
   currentUser {
     username
@@ -169,13 +169,13 @@ curl --request POST \
 
 Command for generate TypeRegistry
 
-```
+```shell
 php bin/console flexible_graphql:generate-type-registry
 ```
 
 Run http server for handle GraphQL requests
 
-```
+```shell
 php -S localhost:8080 FlexibleGraphqlBundle/index.php
 ```
 
@@ -183,13 +183,13 @@ php -S localhost:8080 FlexibleGraphqlBundle/index.php
 
 Command for generate TypeRegistry
 
-```
+```shell
 php NoFramework/generate.php
 ```
 
 Run http server for handle GraphQL requests
 
-```
+```shell
 php -S localhost:8080 NoFramework/index.php
 ```
 
@@ -199,14 +199,14 @@ install node.js
 
 Install dependency
 
-```
+```shell
 cd ApolloFederation
 npm install
 ```
 
 Run Apollo Federation
 
-```
+```shell
 cd ApolloFederation
 node index
 ```
