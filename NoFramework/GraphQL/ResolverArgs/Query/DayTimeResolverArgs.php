@@ -20,7 +20,7 @@ final class DayTimeResolverArgs extends InputType
         }
 
         if ($name === 'timestamps') {
-            return (function($value) {foreach($value as $v) yield (function($value){ foreach($value as $v) yield ($v === null ? null : new TimestampInputInputType($v)); })($v); })($value);
+            return (function($value) {foreach($value as $v) yield (function($value) {foreach($value as $v) yield ($v === null ? null : new TimestampInputInputType($v)); })($v); })($value);
         }
 
         return $value;
