@@ -104,16 +104,16 @@
         },
         {
             "name": "axtiva/flexible-graphql-php",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axtiva/flexible-graphql-php.git",
-                "reference": "476ad264af43fa555417855db72ce94ed8513bbe"
+                "reference": "203c7fbfea7455206d9fa972345d69faa9edf688"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/476ad264af43fa555417855db72ce94ed8513bbe",
-                "reference": "476ad264af43fa555417855db72ce94ed8513bbe",
+                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/203c7fbfea7455206d9fa972345d69faa9edf688",
+                "reference": "203c7fbfea7455206d9fa972345d69faa9edf688",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "description": "Schema SDL first lib for generate php code from graphql sdl to TypeRegistry with webonyx/graphql-php",
             "support": {
                 "issues": "https://github.com/axtiva/flexible-graphql-php/issues",
-                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v1.1.1"
+                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v1.1.2"
             },
-            "time": "2022-07-02T21:29:56+00:00"
+            "time": "2022-07-07T19:47:27+00:00"
         },
         {
             "name": "axtiva/graphql-federation-extension",
