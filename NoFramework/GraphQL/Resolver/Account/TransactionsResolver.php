@@ -3,14 +3,12 @@
 declare (strict_types=1);
 namespace SelfWritten\GraphQL\Resolver\Account;
 
-use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;
 use SelfWritten\Entity\Account;
 use SelfWritten\GraphQL\Mapper\EntityToGQLModel;
 use SelfWritten\GraphQL\Model\TransactionType;
 use SelfWritten\Repository\TransactionRepository;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -21,7 +19,6 @@ final class TransactionsResolver implements ResolverInterface
 {
     public function __invoke($rootValue, $args, $context, ResolveInfo $info)
     {
-        yield from [];
         $account = new Account(UuidV4::fromString($rootValue->id));
         foreach ((new TransactionRepository())->findByAccount($account) as $entity) {
             $response = new TransactionType();

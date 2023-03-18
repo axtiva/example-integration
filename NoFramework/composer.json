@@ -6,9 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "myclabs/php-enum": "^1.8",
-        "axtiva/flexible-graphql-php": "^1.0",
-        "axtiva/graphql-federation-extension": "^1.0",
-        "axtiva/flexible-graphql-federation": "^1.0",
+        "axtiva/flexible-graphql-php": "^2.0",
         "psr/container": "^2.0",
         "symfony/uid": "^5.3"
     },

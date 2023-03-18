@@ -3,14 +3,12 @@
 declare (strict_types=1);
 namespace SelfWritten\GraphQL\Representation;
 
+use Axtiva\FlexibleGraphql\Representation;
+use Axtiva\FlexibleGraphql\Resolver\FederationRepresentationResolverInterface;
 use GraphQL\Type\Definition\ResolveInfo;
-use Axtiva\FlexibleGraphql\Federation\Representation;
-use Axtiva\FlexibleGraphql\Federation\Resolver\FederationRepresentationResolverInterface;
-use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
 use SelfWritten\GraphQL\Mapper\EntityToGQLModel;
 use SelfWritten\GraphQL\Model\TransactionType;
 use SelfWritten\Repository\TransactionRepository;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV6;
 
 /**

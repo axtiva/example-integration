@@ -6,7 +6,7 @@ enum link__Purpose {
     "`EXECUTION` features provide metadata necessary for operation execution."
     EXECUTION
 }
-extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key", "@extends", "@external", "@requires", "@provides", "@shareable", "@override", "FieldSet"])
+extend schema @link(url: "https://specs.apollo.dev/federation/v2.2", import: ["@key", "@extends", "@external", "@requires", "@provides", "@shareable", "@override", "FieldSet"])
 scalar FieldSet
 scalar link__Import
 directive @external on FIELD_DEFINITION

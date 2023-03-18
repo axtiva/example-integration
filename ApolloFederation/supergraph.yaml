@@ -1,0 +1,10 @@
+federation_version: 2
+subgraphs:
+  no_framework:
+    routing_url: http://no-framework:8082/
+    schema:
+      file: /app/no_framework.graphql
+  symfony:
+    routing_url: http://flexible-graphql-bundle:8081/
+    schema:
+      file: /app/symfony.graphql

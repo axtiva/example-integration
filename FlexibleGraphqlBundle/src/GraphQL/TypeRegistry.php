@@ -14,7 +14,7 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\CustomScalarType;
 use GraphQL\Type\Definition\UnionType;
 use GraphQL\Type\Definition\Directive;
-use GraphQL\Type\Definition\FieldArgument;
+use GraphQL\Type\Definition\Argument;
 use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\InputObjectField;
 use Psr\Container\ContainerInterface;
@@ -40,12 +40,56 @@ class TypeRegistry
     }
     
     
+            public function link__Purpose()
+            {
+                return new EnumType([
+        'name' => 'link__Purpose',
+        'description' => NULL,
+        'values' => ['SECURITY' => [
+            'name' => 'SECURITY', 
+            'value' => 'SECURITY',
+            'description' => '`SECURITY` features provide metadata necessary to securely resolve fields.',
+            'deprecationReason' => NULL,
+            ],
+'EXECUTION' => [
+            'name' => 'EXECUTION', 
+            'value' => 'EXECUTION',
+            'description' => '`EXECUTION` features provide metadata necessary for operation execution.',
+            'deprecationReason' => NULL,
+            ]],
+        ]);
+            }
+        
+
+
+            public function FieldSet()
+            {
+                return new CustomScalarType([
+            'name' => 'FieldSet',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
+            public function link__Import()
+            {
+                return new CustomScalarType([
+            'name' => 'link__Import',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
             public function Query()
             {
                 return new ObjectType([
             'name' => 'Query',
             'description' => NULL,
-            'fields' => fn() => ['currentUser' => FieldDefinition::create([
+            'fields' => fn() => ['currentUser' => new FieldDefinition([
             'name' => 'currentUser',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -55,7 +99,7 @@ class TypeRegistry
 }),
             'type' => function() { return $this->getType('User'); },
             'args' => [],
-        ]),'mod' => FieldDefinition::create([
+        ]),'mod' => new FieldDefinition([
             'name' => 'mod',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -78,7 +122,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'echo' => FieldDefinition::create([
+        ]),'echo' => new FieldDefinition([
             'name' => 'echo',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -100,7 +144,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'print' => FieldDefinition::create([
+        ]),'print' => new FieldDefinition([
             'name' => 'print',
             'description' => NULL,
             'deprecationReason' => 'Use echo field',
@@ -122,7 +166,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'dayTime' => FieldDefinition::create([
+        ]),'dayTime' => new FieldDefinition([
             'name' => 'dayTime',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -137,7 +181,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'time' => FieldDefinition::create([
+        ]),'time' => new FieldDefinition([
             'name' => 'time',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -155,7 +199,7 @@ class TypeRegistry
                     },
             'type' => function() { return Type::nonNull(function() { return $this->getType('Time'); }); },
             'args' => [],
-        ]),'account' => FieldDefinition::create([
+        ]),'account' => new FieldDefinition([
             'name' => 'account',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -170,7 +214,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'accounts' => FieldDefinition::create([
+        ]),'accounts' => new FieldDefinition([
             'name' => 'accounts',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -180,23 +224,23 @@ class TypeRegistry
 }),
             'type' => function() { return new ListOfType(function() { return $this->getType('Account'); }); },
             'args' => [],
-        ]),'_service' => FieldDefinition::create([
+        ]),'_service' => new FieldDefinition([
             'name' => '_service',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
     
-    return $this->container->get('App\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+    return $this->container->get('App\GraphQL\Resolver\Query\_ServiceResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
-        ]),'_entities' => FieldDefinition::create([
+        ]),'_entities' => new FieldDefinition([
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
-    $args = new \App\GraphQL\ResolverArgs\Query\_entitiesResolverArgs($args);
-    return $this->container->get('App\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
+    $args = new \App\GraphQL\ResolverArgs\Query\_EntitiesResolverArgs($args);
+    return $this->container->get('App\GraphQL\Resolver\Query\_EntitiesResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
             'args' => ['representations' => [
@@ -211,19 +255,168 @@ class TypeRegistry
         
 
 
+            public function Mutation()
+            {
+                return new ObjectType([
+            'name' => 'Mutation',
+            'description' => NULL,
+            'fields' => fn() => ['setAmountAccount' => new FieldDefinition([
+            'name' => 'setAmountAccount',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Mutation\SetAmountAccountResolverArgs($args);
+    return $this->container->get('App\GraphQL\Resolver\Mutation\SetAmountAccountResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return $this->getType('Account'); },
+            'args' => ['idAccount' => [
+            'name' => 'idAccount',
+            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],'amount' => [
+            'name' => 'amount',
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]],
+        ]),'createAccount' => new FieldDefinition([
+            'name' => 'createAccount',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \App\GraphQL\ResolverArgs\Mutation\CreateAccountResolverArgs($args);
+    return $this->container->get('App\GraphQL\Resolver\Mutation\CreateAccountResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return $this->getType('Account'); },
+            'args' => ['number' => [
+            'name' => 'number',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]],
+        ])],
+        ]);
+            }
+        
+
+
+            public function Account()
+            {
+                return new ObjectType([
+            'name' => 'Account',
+            'description' => NULL,
+            'fields' => fn() => ['id' => new FieldDefinition([
+            'name' => 'id',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
+            'args' => [],
+        ]),'number' => new FieldDefinition([
+            'name' => 'number',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'args' => [],
+        ]),'currency' => new FieldDefinition([
+            'name' => 'currency',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('Currency'); }); },
+            'args' => [],
+        ]),'status' => new FieldDefinition([
+            'name' => 'status',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('AccountStatus'); }); },
+            'args' => [],
+        ]),'amount' => new FieldDefinition([
+            'name' => 'amount',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'args' => [],
+        ]),'createdAt' => new FieldDefinition([
+            'name' => 'createdAt',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function NamedCurrency()
+            {
+                return new ObjectType([
+            'name' => 'NamedCurrency',
+            'description' => NULL,
+            'fields' => fn() => ['name' => new FieldDefinition([
+            'name' => 'name',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'args' => [],
+        ]),'accounts' => new FieldDefinition([
+            'name' => 'accounts',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Account'); }); }); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function CodedCurrency()
+            {
+                return new ObjectType([
+            'name' => 'CodedCurrency',
+            'description' => NULL,
+            'fields' => fn() => ['code' => new FieldDefinition([
+            'name' => 'code',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'args' => [],
+        ]),'accounts' => new FieldDefinition([
+            'name' => 'accounts',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Account'); }); }); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
             public function User()
             {
                 return new ObjectType([
             'name' => 'User',
             'description' => NULL,
-            'fields' => fn() => ['username' => FieldDefinition::create([
+            'fields' => fn() => ['username' => new FieldDefinition([
             'name' => 'username',
             'description' => NULL,
             'deprecationReason' => NULL,
             // No resolver. Default used
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
             'args' => [],
-        ]),'role' => FieldDefinition::create([
+        ]),'role' => new FieldDefinition([
             'name' => 'role',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -231,6 +424,18 @@ class TypeRegistry
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
             'args' => [],
         ])],
+        ]);
+            }
+        
+
+
+            public function Currency()
+            {
+                return new UnionType([
+            'name' => 'Currency',
+            'description' => NULL,
+            'types' => function() { return [$this->getType('NamedCurrency'),$this->getType('CodedCurrency')];},
+            'resolveType' => $this->container->get('App\GraphQL\UnionResolveType\CurrencyTypeResolver'),
         ]);
             }
         
@@ -257,19 +462,6 @@ class TypeRegistry
         
 
 
-            public function NotZeroInt()
-            {
-                return new CustomScalarType([
-            'name' => 'NotZeroInt',
-            'description' => 'Accept not 0 value',
-            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->serialize($value);},
-            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseValue($value);},
-            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseLiteral($value, $variables);},
-        ]);
-            }
-        
-
-
             public function TimestampInput()
             {
                 return new InputObjectType([
@@ -281,147 +473,6 @@ class TypeRegistry
             'defaultValue' => NULL,
             'type' => Type::nonNull(function() { return Type::int(); }),
         ]],
-        ]);
-            }
-        
-
-
-            public function DateTime()
-            {
-                return new CustomScalarType([
-            'name' => 'DateTime',
-            'description' => 'Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000',
-            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
-            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
-            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
-        ]);
-            }
-        
-
-
-            public function Time()
-            {
-                return new CustomScalarType([
-            'name' => 'Time',
-            'description' => 'Format: HH:MM:SS',
-            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->serialize($value);},
-            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseValue($value);},
-            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseLiteral($value, $variables);},
-        ]);
-            }
-        
-
-
-            public function Account()
-            {
-                return new ObjectType([
-            'name' => 'Account',
-            'description' => NULL,
-            'fields' => fn() => ['id' => FieldDefinition::create([
-            'name' => 'id',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'args' => [],
-        ]),'number' => FieldDefinition::create([
-            'name' => 'number',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'args' => [],
-        ]),'currency' => FieldDefinition::create([
-            'name' => 'currency',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('Currency'); }); },
-            'args' => [],
-        ]),'status' => FieldDefinition::create([
-            'name' => 'status',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('AccountStatus'); }); },
-            'args' => [],
-        ]),'amount' => FieldDefinition::create([
-            'name' => 'amount',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'args' => [],
-        ]),'createdAt' => FieldDefinition::create([
-            'name' => 'createdAt',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
-            'args' => [],
-        ])],
-        ]);
-            }
-        
-
-
-            public function Currency()
-            {
-                return new UnionType([
-            'name' => 'Currency',
-            'description' => NULL,
-            'types' => function() { return [$this->getType('NamedCurrency'),$this->getType('CodedCurrency')];},
-            'resolveType' => $this->container->get('App\GraphQL\UnionResolveType\CurrencyTypeResolver'),
-        ]);
-            }
-        
-
-
-            public function NamedCurrency()
-            {
-                return new ObjectType([
-            'name' => 'NamedCurrency',
-            'description' => NULL,
-            'fields' => fn() => ['name' => FieldDefinition::create([
-            'name' => 'name',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'args' => [],
-        ]),'accounts' => FieldDefinition::create([
-            'name' => 'accounts',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Account'); }); }); }); },
-            'args' => [],
-        ])],
-        ]);
-            }
-        
-
-
-            public function CodedCurrency()
-            {
-                return new ObjectType([
-            'name' => 'CodedCurrency',
-            'description' => NULL,
-            'fields' => fn() => ['code' => FieldDefinition::create([
-            'name' => 'code',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'args' => [],
-        ]),'accounts' => FieldDefinition::create([
-            'name' => 'accounts',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Account'); }); }); }); },
-            'args' => [],
-        ])],
         ]);
             }
         
@@ -449,12 +500,62 @@ class TypeRegistry
         
 
 
+            public function NotZeroInt()
+            {
+                return new CustomScalarType([
+            'name' => 'NotZeroInt',
+            'description' => 'Accept not 0 value',
+            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->serialize($value);},
+            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseValue($value);},
+            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\NotZeroIntScalar'))->parseLiteral($value, $variables);},
+        ]);
+            }
+        
+
+
+            public function Time()
+            {
+                return new CustomScalarType([
+            'name' => 'Time',
+            'description' => 'Format: HH:MM:SS',
+            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->serialize($value);},
+            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseValue($value);},
+            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\TimeScalar'))->parseLiteral($value, $variables);},
+        ]);
+            }
+        
+
+
+            public function DateTime()
+            {
+                return new CustomScalarType([
+            'name' => 'DateTime',
+            'description' => 'Format: ISO8601 YYYY-MM-DDTHH:MM:SS+0000',
+            'serialize' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
+            'parseValue' => function($value) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
+            'parseLiteral' => function($value, $variables) {return ($this->container->get('App\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
+        ]);
+            }
+        
+
+
+            public function _FieldSet()
+            {
+                return new CustomScalarType([
+            'name' => '_FieldSet',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
             public function _Service()
             {
                 return new ObjectType([
             'name' => '_Service',
             'description' => NULL,
-            'fields' => fn() => ['sdl' => FieldDefinition::create([
+            'fields' => fn() => ['sdl' => new FieldDefinition([
             'name' => 'sdl',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -462,17 +563,6 @@ class TypeRegistry
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
             'args' => [],
         ])],
-        ]);
-            }
-        
-
-
-            public function _Any()
-            {
-                return new CustomScalarType([
-            'name' => '_Any',
-            'description' => NULL,
-
         ]);
             }
         
@@ -490,89 +580,10 @@ class TypeRegistry
         
 
 
-            public function Mutation()
-            {
-                return new ObjectType([
-            'name' => 'Mutation',
-            'description' => NULL,
-            'fields' => fn() => ['setAmountAccount' => FieldDefinition::create([
-            'name' => 'setAmountAccount',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    $args = new \App\GraphQL\ResolverArgs\Mutation\SetAmountAccountResolverArgs($args);
-    return $this->container->get('App\GraphQL\Resolver\Mutation\SetAmountAccountResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return $this->getType('Account'); },
-            'args' => ['idAccount' => [
-            'name' => 'idAccount',
-            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
-        ],'amount' => [
-            'name' => 'amount',
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
-        ]],
-        ]),'createAccount' => FieldDefinition::create([
-            'name' => 'createAccount',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    $args = new \App\GraphQL\ResolverArgs\Mutation\CreateAccountResolverArgs($args);
-    return $this->container->get('App\GraphQL\Resolver\Mutation\CreateAccountResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return $this->getType('Account'); },
-            'args' => ['number' => [
-            'name' => 'number',
-            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
-        ]],
-        ])],
-        ]);
-            }
-        
-
-
-            public function link__Purpose()
-            {
-                return new EnumType([
-        'name' => 'link__Purpose',
-        'description' => NULL,
-        'values' => ['SECURITY' => [
-            'name' => 'SECURITY', 
-            'value' => 'SECURITY',
-            'description' => '`SECURITY` features provide metadata necessary to securely resolve fields.',
-            'deprecationReason' => NULL,
-            ],
-'EXECUTION' => [
-            'name' => 'EXECUTION', 
-            'value' => 'EXECUTION',
-            'description' => '`EXECUTION` features provide metadata necessary for operation execution.',
-            'deprecationReason' => NULL,
-            ]],
-        ]);
-            }
-        
-
-
-            public function link__Import()
+            public function _Any()
             {
                 return new CustomScalarType([
-            'name' => 'link__Import',
-            'description' => NULL,
-
-        ]);
-            }
-        
-
-
-            public function FieldSet()
-            {
-                return new CustomScalarType([
-            'name' => 'FieldSet',
+            'name' => '_Any',
             'description' => NULL,
 
         ]);
@@ -895,9 +906,244 @@ class TypeRegistry
         
 
 
+    public function directive_tag()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'tag',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['FIELD_DEFINITION','INTERFACE','OBJECT','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'name',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__tag()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__tag',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['FIELD_DEFINITION','INTERFACE','OBJECT','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'name',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__shareable()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__shareable',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['OBJECT','FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__inaccessible()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__inaccessible',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION','OBJECT','INTERFACE','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__override()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__override',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'from',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__external()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__external',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__requires()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__requires',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__provides()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__provides',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__key()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__key',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['OBJECT','INTERFACE'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'resolvable',
+            'type' => function() { return Type::boolean(); },
+            'defaultValue' => true,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__extends()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__extends',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['OBJECT','INTERFACE'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
     public function getDirectives()
     {
-        return [$this->directive_link(),$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_shareable(),$this->directive_inaccessible(),$this->directive_override(),$this->directive_extends(),$this->directive_uppercase(),$this->directive_pow(),$this->directive_isAuthenticated(),$this->directive_hasRole()];
+        return [$this->directive_link(),$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_shareable(),$this->directive_inaccessible(),$this->directive_override(),$this->directive_extends(),$this->directive_uppercase(),$this->directive_pow(),$this->directive_isAuthenticated(),$this->directive_hasRole(),$this->directive_tag(),$this->directive_federation__tag(),$this->directive_federation__shareable(),$this->directive_federation__inaccessible(),$this->directive_federation__override(),$this->directive_federation__external(),$this->directive_federation__requires(),$this->directive_federation__provides(),$this->directive_federation__key(),$this->directive_federation__extends()];
     }
         
 

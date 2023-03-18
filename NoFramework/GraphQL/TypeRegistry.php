@@ -14,7 +14,7 @@ use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\CustomScalarType;
 use GraphQL\Type\Definition\UnionType;
 use GraphQL\Type\Definition\Directive;
-use GraphQL\Type\Definition\FieldArgument;
+use GraphQL\Type\Definition\Argument;
 use GraphQL\Type\Definition\FieldDefinition;
 use GraphQL\Type\Definition\InputObjectField;
 use Psr\Container\ContainerInterface;
@@ -40,12 +40,56 @@ class TypeRegistry
     }
     
     
+            public function link__Purpose()
+            {
+                return new EnumType([
+        'name' => 'link__Purpose',
+        'description' => NULL,
+        'values' => ['SECURITY' => [
+            'name' => 'SECURITY', 
+            'value' => 'SECURITY',
+            'description' => '`SECURITY` features provide metadata necessary to securely resolve fields.',
+            'deprecationReason' => NULL,
+            ],
+'EXECUTION' => [
+            'name' => 'EXECUTION', 
+            'value' => 'EXECUTION',
+            'description' => '`EXECUTION` features provide metadata necessary for operation execution.',
+            'deprecationReason' => NULL,
+            ]],
+        ]);
+            }
+        
+
+
+            public function FieldSet()
+            {
+                return new CustomScalarType([
+            'name' => 'FieldSet',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
+            public function link__Import()
+            {
+                return new CustomScalarType([
+            'name' => 'link__Import',
+            'description' => NULL,
+
+        ]);
+            }
+        
+
+
             public function Query()
             {
                 return new ObjectType([
             'name' => 'Query',
             'description' => NULL,
-            'fields' => fn() => ['sum' => FieldDefinition::create([
+            'fields' => fn() => ['sum' => new FieldDefinition([
             'name' => 'sum',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -75,7 +119,7 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'date' => FieldDefinition::create([
+        ]),'date' => new FieldDefinition([
             'name' => 'date',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -93,7 +137,7 @@ class TypeRegistry
                     },
             'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
             'args' => [],
-        ]),'dayTime' => FieldDefinition::create([
+        ]),'dayTime' => new FieldDefinition([
             'name' => 'dayTime',
             'description' => NULL,
             'deprecationReason' => NULL,
@@ -108,23 +152,23 @@ class TypeRegistry
             'defaultValue' => NULL,
             'description' => NULL,
         ]],
-        ]),'_service' => FieldDefinition::create([
+        ]),'_service' => new FieldDefinition([
             'name' => '_service',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
     
-    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_serviceResolver')($rootValue, $args, $context, $info);
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_ServiceResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return $this->getType('_Service'); }); },
             'args' => [],
-        ]),'_entities' => FieldDefinition::create([
+        ]),'_entities' => new FieldDefinition([
             'name' => '_entities',
             'description' => NULL,
             'deprecationReason' => NULL,
             'resolve' => (function ($rootValue, $args, $context, $info) {
-    $args = new \SelfWritten\GraphQL\ResolverArgs\Query\_entitiesResolverArgs($args);
-    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_entitiesResolver')($rootValue, $args, $context, $info);
+    $args = new \SelfWritten\GraphQL\ResolverArgs\Query\_EntitiesResolverArgs($args);
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Query\_EntitiesResolver')($rootValue, $args, $context, $info);
 }),
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return $this->getType('_Entity'); }); }); },
             'args' => ['representations' => [
@@ -134,6 +178,166 @@ class TypeRegistry
             'description' => NULL,
         ]],
         ])],
+        ]);
+            }
+        
+
+
+            public function Mutation()
+            {
+                return new ObjectType([
+            'name' => 'Mutation',
+            'description' => NULL,
+            'fields' => fn() => ['createTransaction' => new FieldDefinition([
+            'name' => 'createTransaction',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    $args = new \SelfWritten\GraphQL\ResolverArgs\Mutation\CreateTransactionResolverArgs($args);
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return $this->getType('Transaction'); },
+            'args' => ['accountId' => [
+            'name' => 'accountId',
+            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],'amount' => [
+            'name' => 'amount',
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]],
+        ])],
+        ]);
+            }
+        
+
+
+            public function Account()
+            {
+                return new ObjectType([
+            'name' => 'Account',
+            'description' => NULL,
+            'fields' => fn() => ['id' => new FieldDefinition([
+            'name' => 'id',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
+            'args' => [],
+        ]),'transactions' => new FieldDefinition([
+            'name' => 'transactions',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            'resolve' => (function ($rootValue, $args, $context, $info) {
+    
+    return $this->container->get('SelfWritten\GraphQL\Resolver\Account\TransactionsResolver')($rootValue, $args, $context, $info);
+}),
+            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Transaction'); }); }); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function Transaction()
+            {
+                return new ObjectType([
+            'name' => 'Transaction',
+            'description' => NULL,
+            'fields' => fn() => ['id' => new FieldDefinition([
+            'name' => 'id',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
+            'args' => [],
+        ]),'amount' => new FieldDefinition([
+            'name' => 'amount',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'args' => [],
+        ]),'status' => new FieldDefinition([
+            'name' => 'status',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('TransactionStatus'); }); },
+            'args' => [],
+        ]),'account' => new FieldDefinition([
+            'name' => 'account',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('Account'); }); },
+            'args' => [],
+        ]),'log' => new FieldDefinition([
+            'name' => 'log',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('TransactionLog'); }); }); },
+            'args' => [],
+        ]),'createdAt' => new FieldDefinition([
+            'name' => 'createdAt',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function TransactionMessageLog()
+            {
+                return new ObjectType([
+            'name' => 'TransactionMessageLog',
+            'description' => NULL,
+            'fields' => fn() => ['message' => new FieldDefinition([
+            'name' => 'message',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function TransactionCodeLog()
+            {
+                return new ObjectType([
+            'name' => 'TransactionCodeLog',
+            'description' => NULL,
+            'fields' => fn() => ['code' => new FieldDefinition([
+            'name' => 'code',
+            'description' => NULL,
+            'deprecationReason' => NULL,
+            // No resolver. Default used
+            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
+            'args' => [],
+        ])],
+        ]);
+            }
+        
+
+
+            public function TransactionLog()
+            {
+                return new UnionType([
+            'name' => 'TransactionLog',
+            'description' => NULL,
+            'types' => function() { return [$this->getType('TransactionMessageLog'),$this->getType('TransactionCodeLog')];},
+            'resolveType' => $this->container->get('SelfWritten\GraphQL\UnionResolveType\TransactionLogTypeResolver'),
         ]);
             }
         
@@ -160,19 +364,6 @@ class TypeRegistry
         
 
 
-            public function DateTime()
-            {
-                return new CustomScalarType([
-            'name' => 'DateTime',
-            'description' => NULL,
-            'serialize' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
-            'parseValue' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
-            'parseLiteral' => function($value, $variables) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
-        ]);
-            }
-        
-
-
             public function TimestampInput()
             {
                 return new InputObjectType([
@@ -184,100 +375,6 @@ class TypeRegistry
             'defaultValue' => NULL,
             'type' => Type::nonNull(function() { return Type::int(); }),
         ]],
-        ]);
-            }
-        
-
-
-            public function _Service()
-            {
-                return new ObjectType([
-            'name' => '_Service',
-            'description' => NULL,
-            'fields' => fn() => ['sdl' => FieldDefinition::create([
-            'name' => 'sdl',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'args' => [],
-        ])],
-        ]);
-            }
-        
-
-
-            public function _Any()
-            {
-                return new CustomScalarType([
-            'name' => '_Any',
-            'description' => NULL,
-
-        ]);
-            }
-        
-
-
-            public function _Entity()
-            {
-                return new UnionType([
-            'name' => '_Entity',
-            'description' => NULL,
-            'types' => function() { return [$this->getType('Transaction'),$this->getType('Account')];},
-            'resolveType' => $this->container->get('SelfWritten\GraphQL\UnionResolveType\_EntityTypeResolver'),
-        ]);
-            }
-        
-
-
-            public function Transaction()
-            {
-                return new ObjectType([
-            'name' => 'Transaction',
-            'description' => NULL,
-            'fields' => fn() => ['id' => FieldDefinition::create([
-            'name' => 'id',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'args' => [],
-        ]),'amount' => FieldDefinition::create([
-            'name' => 'amount',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'args' => [],
-        ]),'status' => FieldDefinition::create([
-            'name' => 'status',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('TransactionStatus'); }); },
-            'args' => [],
-        ]),'account' => FieldDefinition::create([
-            'name' => 'account',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('Account'); }); },
-            'args' => [],
-        ]),'log' => FieldDefinition::create([
-            'name' => 'log',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('TransactionLog'); }); }); },
-            'args' => [],
-        ]),'createdAt' => FieldDefinition::create([
-            'name' => 'createdAt',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return $this->getType('DateTime'); }); },
-            'args' => [],
-        ])],
         ]);
             }
         
@@ -311,53 +408,37 @@ class TypeRegistry
         
 
 
-            public function Account()
+            public function DateTime()
             {
-                return new ObjectType([
-            'name' => 'Account',
+                return new CustomScalarType([
+            'name' => 'DateTime',
             'description' => NULL,
-            'fields' => fn() => ['id' => FieldDefinition::create([
-            'name' => 'id',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'args' => [],
-        ]),'transactions' => FieldDefinition::create([
-            'name' => 'transactions',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    
-    return $this->container->get('SelfWritten\GraphQL\Resolver\Account\TransactionsResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('Transaction'); }); }); }); },
-            'args' => [],
-        ])],
+            'serialize' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->serialize($value);},
+            'parseValue' => function($value) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseValue($value);},
+            'parseLiteral' => function($value, $variables) {return ($this->container->get('SelfWritten\GraphQL\Scalar\DateTimeScalar'))->parseLiteral($value, $variables);},
         ]);
             }
         
 
 
-            public function TransactionLog()
+            public function _FieldSet()
             {
-                return new UnionType([
-            'name' => 'TransactionLog',
+                return new CustomScalarType([
+            'name' => '_FieldSet',
             'description' => NULL,
-            'types' => function() { return [$this->getType('TransactionMessageLog'),$this->getType('TransactionCodeLog')];},
-            'resolveType' => $this->container->get('SelfWritten\GraphQL\UnionResolveType\TransactionLogTypeResolver'),
+
         ]);
             }
         
 
 
-            public function TransactionMessageLog()
+            public function _Service()
             {
                 return new ObjectType([
-            'name' => 'TransactionMessageLog',
+            'name' => '_Service',
             'description' => NULL,
-            'fields' => fn() => ['message' => FieldDefinition::create([
-            'name' => 'message',
+            'fields' => fn() => ['sdl' => new FieldDefinition([
+            'name' => 'sdl',
             'description' => NULL,
             'deprecationReason' => NULL,
             // No resolver. Default used
@@ -369,92 +450,22 @@ class TypeRegistry
         
 
 
-            public function TransactionCodeLog()
+            public function _Entity()
             {
-                return new ObjectType([
-            'name' => 'TransactionCodeLog',
+                return new UnionType([
+            'name' => '_Entity',
             'description' => NULL,
-            'fields' => fn() => ['code' => FieldDefinition::create([
-            'name' => 'code',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            // No resolver. Default used
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'args' => [],
-        ])],
+            'types' => function() { return [$this->getType('Account'),$this->getType('Transaction')];},
+            'resolveType' => $this->container->get('SelfWritten\GraphQL\UnionResolveType\_EntityTypeResolver'),
         ]);
             }
         
 
 
-            public function Mutation()
-            {
-                return new ObjectType([
-            'name' => 'Mutation',
-            'description' => NULL,
-            'fields' => fn() => ['createTransaction' => FieldDefinition::create([
-            'name' => 'createTransaction',
-            'description' => NULL,
-            'deprecationReason' => NULL,
-            'resolve' => (function ($rootValue, $args, $context, $info) {
-    $args = new \SelfWritten\GraphQL\ResolverArgs\Mutation\CreateTransactionResolverArgs($args);
-    return $this->container->get('SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver')($rootValue, $args, $context, $info);
-}),
-            'type' => function() { return $this->getType('Transaction'); },
-            'args' => ['accountId' => [
-            'name' => 'accountId',
-            'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
-        ],'amount' => [
-            'name' => 'amount',
-            'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
-        ]],
-        ])],
-        ]);
-            }
-        
-
-
-            public function link__Purpose()
-            {
-                return new EnumType([
-        'name' => 'link__Purpose',
-        'description' => NULL,
-        'values' => ['SECURITY' => [
-            'name' => 'SECURITY', 
-            'value' => 'SECURITY',
-            'description' => '`SECURITY` features provide metadata necessary to securely resolve fields.',
-            'deprecationReason' => NULL,
-            ],
-'EXECUTION' => [
-            'name' => 'EXECUTION', 
-            'value' => 'EXECUTION',
-            'description' => '`EXECUTION` features provide metadata necessary for operation execution.',
-            'deprecationReason' => NULL,
-            ]],
-        ]);
-            }
-        
-
-
-            public function link__Import()
+            public function _Any()
             {
                 return new CustomScalarType([
-            'name' => 'link__Import',
-            'description' => NULL,
-
-        ]);
-            }
-        
-
-
-            public function FieldSet()
-            {
-                return new CustomScalarType([
-            'name' => 'FieldSet',
+            'name' => '_Any',
             'description' => NULL,
 
         ]);
@@ -469,7 +480,7 @@ class TypeRegistry
             $directive = new Directive([
             'name' => 'link',
             'description' => 'Apollo federation directives',
-            'isRepeatable' => false,
+            'isRepeatable' => true,
             'locations' => ['SCHEMA'],
             'args' => [
                 [
@@ -579,7 +590,7 @@ class TypeRegistry
             $directive = new Directive([
             'name' => 'key',
             'description' => NULL,
-            'isRepeatable' => false,
+            'isRepeatable' => true,
             'locations' => ['OBJECT','INTERFACE'],
             'args' => [
                 [
@@ -777,9 +788,244 @@ class TypeRegistry
         
 
 
+    public function directive_tag()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'tag',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['FIELD_DEFINITION','INTERFACE','OBJECT','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'name',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__tag()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__tag',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['FIELD_DEFINITION','INTERFACE','OBJECT','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'name',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__shareable()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__shareable',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['OBJECT','FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__inaccessible()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__inaccessible',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION','OBJECT','INTERFACE','UNION','ARGUMENT_DEFINITION','SCALAR','ENUM','ENUM_VALUE','INPUT_OBJECT','INPUT_FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__override()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__override',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'from',
+            'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__external()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__external',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__requires()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__requires',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__provides()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__provides',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['FIELD_DEFINITION'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__key()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__key',
+            'description' => NULL,
+            'isRepeatable' => true,
+            'locations' => ['OBJECT','INTERFACE'],
+            'args' => [
+                [
+            'name' => 'fields',
+            'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
+            'defaultValue' => NULL,
+            'description' => NULL,
+        ],[
+            'name' => 'resolvable',
+            'type' => function() { return Type::boolean(); },
+            'defaultValue' => true,
+            'description' => NULL,
+        ]
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
+    public function directive_federation__extends()
+    {
+        static $directive = null;
+        if ($directive === null) {
+            $directive = new Directive([
+            'name' => 'federation__extends',
+            'description' => NULL,
+            'isRepeatable' => false,
+            'locations' => ['OBJECT','INTERFACE'],
+            'args' => [
+                
+            ],
+        ]);
+        }
+        
+        return $directive;
+    }
+        
+
+
     public function getDirectives()
     {
-        return [$this->directive_link(),$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_shareable(),$this->directive_inaccessible(),$this->directive_override(),$this->directive_extends(),$this->directive_isAuthenticated(),$this->directive_hasRole(),$this->directive_pow(),$this->directive_uppercase()];
+        return [$this->directive_link(),$this->directive_external(),$this->directive_requires(),$this->directive_provides(),$this->directive_key(),$this->directive_shareable(),$this->directive_inaccessible(),$this->directive_override(),$this->directive_extends(),$this->directive_isAuthenticated(),$this->directive_hasRole(),$this->directive_pow(),$this->directive_uppercase(),$this->directive_tag(),$this->directive_federation__tag(),$this->directive_federation__shareable(),$this->directive_federation__inaccessible(),$this->directive_federation__override(),$this->directive_federation__external(),$this->directive_federation__requires(),$this->directive_federation__provides(),$this->directive_federation__key(),$this->directive_federation__extends()];
     }
         
 

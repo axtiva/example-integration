@@ -1,17 +1,13 @@
 <?php
 
 use Axtiva\FlexibleGraphql\Builder\CodeGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilder;
-use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilder;
+use Axtiva\FlexibleGraphql\Builder\Foundation\CodeGeneratorBuilderFederated;
+use Axtiva\FlexibleGraphql\Builder\Foundation\Psr\Container\TypeRegistryGeneratorBuilderFederated;
 use Axtiva\FlexibleGraphql\Builder\TypeRegistryGeneratorBuilderInterface;
-use Axtiva\FlexibleGraphql\Federation\Generator\Config\Foundation\Psr4\FederationRepresentationResolverGeneratorConfig;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\_EntitiesResolverGenerator;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\_ServiceResolverGenerator;
-use Axtiva\FlexibleGraphql\Federation\Generator\Model\Foundation\Psr4\FederationRepresentationResolverGenerator;
-use Axtiva\FlexibleGraphql\FederationExtension\FederationSchemaExtender;
 use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\CodeGeneratorConfig;
-use Axtiva\FlexibleGraphql\Generator\Config\Foundation\Psr4\FieldResolverGeneratorConfig;
 use Axtiva\FlexibleGraphql\Generator\Config\LanguageLevelConfigInterface;
+use Axtiva\FlexibleGraphql\Utils\FederationV22SchemaExtender;
+use GraphQL\Language\Parser;
 use GraphQL\Type\Schema;
 use GraphQL\Utils\BuildSchema;
 use SelfWritten\Container\Container;
@@ -22,8 +18,8 @@ use SelfWritten\GraphQL\Representation\AccountRepresentation;
 use SelfWritten\GraphQL\Representation\TransactionRepresentation;
 use SelfWritten\GraphQL\Resolver\Account\TransactionsResolver;
 use SelfWritten\GraphQL\Resolver\Mutation\CreateTransactionResolver;
-use SelfWritten\GraphQL\Resolver\Query\_entitiesResolver;
-use SelfWritten\GraphQL\Resolver\Query\_serviceResolver;
+use SelfWritten\GraphQL\Resolver\Query\_EntitiesResolver;
+use SelfWritten\GraphQL\Resolver\Query\_ServiceResolver;
 use SelfWritten\GraphQL\Resolver\Query\DateResolver;
 use SelfWritten\GraphQL\Resolver\Query\DayTimeResolver;
 use SelfWritten\GraphQL\Resolver\Query\SumResolver;
@@ -42,18 +38,14 @@ $config = new CodeGeneratorConfig(
 
 $schemaGQL = file_get_contents(__DIR__ . '/../schema.graphql');
 
+$ast = Parser::parse($schemaGQL);
+
 return new Container([
-    Schema::class => FederationSchemaExtender::build(BuildSchema::build($schemaGQL)),
+    Schema::class => FederationV22SchemaExtender::build(BuildSchema::build($ast), $ast),
     CodeGeneratorBuilderInterface::class => (function() use ($config) {
-        $fieldResolverConfig = new FieldResolverGeneratorConfig($config);
-        $federationRepresentationResolverConfig = new FederationRepresentationResolverGeneratorConfig($config);
-        $builder = new CodeGeneratorBuilder($config);
-        $builder->addFieldResolverGenerator(new _EntitiesResolverGenerator($fieldResolverConfig));
-        $builder->addFieldResolverGenerator(new _ServiceResolverGenerator($fieldResolverConfig));
-        $builder->addModelGenerator(new FederationRepresentationResolverGenerator($federationRepresentationResolverConfig));
-        return $builder;
+        return new CodeGeneratorBuilderFederated($config);
     })(),
-    TypeRegistryGeneratorBuilderInterface::class => new TypeRegistryGeneratorBuilder($config),
+    TypeRegistryGeneratorBuilderInterface::class => new TypeRegistryGeneratorBuilderFederated($config),
     CreateTransactionResolver::class => new CreateTransactionResolver(),
     DateTimeScalar::class => new DateTimeScalar(),
     DateResolver::class => new DateResolver(),
@@ -65,6 +57,6 @@ return new Container([
     DayTimeResolver::class => new DayTimeResolver(),
     _EntityTypeResolver::class => new _EntityTypeResolver(),
     TransactionLogTypeResolver::class => new TransactionLogTypeResolver(),
-    _entitiesResolver::class => new _entitiesResolver(...[new AccountRepresentation(), new TransactionRepresentation()]),
-    _serviceResolver::class => new _serviceResolver($schemaGQL),
+    _EntitiesResolver::class => new _EntitiesResolver(...[new AccountRepresentation(), new TransactionRepresentation()]),
+    _ServiceResolver::class => new _ServiceResolver($schemaGQL),
 ]);
