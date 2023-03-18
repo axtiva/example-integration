@@ -27,15 +27,19 @@ services:
       - postgresql
 
   apollo-federation: # demo for apollo federation integration
-    image: node:14.16.0-alpine3.13
+    image: apollo-federation
+    build:
+      context: ApolloFederation
     environment:
       NODE_PATH: /app/node_modules
     working_dir: /app
-    command: sh -c 'npm install && node index'
+    command: sh -c 'npm install && rover supergraph compose --config /app/supergraph.yaml > /app/supergraph.graphql && node index'
     volumes:
       - ./ApolloFederation:/app
+      - ./NoFramework/schema.graphql:/app/no_framework.graphql
+      - ./FlexibleGraphqlBundle/config/graphql/schema.graphql:/app/symfony.graphql
     ports:
-      - 8080:8080
+      - 8888:8888
     depends_on:
       - flexible-graphql-bundle
       - no-framework

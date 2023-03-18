@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace App\GraphQL\Directive;
 
-use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Axtiva\FlexibleGraphql\Resolver\DirectiveResolverInterface;
 

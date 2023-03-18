@@ -1,15 +1,11 @@
 const { ApolloGateway, IntrospectAndCompose, RemoteGraphQLDataSource} = require("@apollo/gateway");
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('@apollo/server');
+const { startStandaloneServer } = require('@apollo/server/standalone')
+const fs = require('fs');
 
 const gateway = new ApolloGateway({
     debug: true,
-    supergraphSdl: new IntrospectAndCompose({
-        subgraphs: [
-            { name: 'flexible-graphql-bundle', url: 'http://flexible-graphql-bundle:8081/' },
-            { name: 'no-framework', url: 'http://no-framework:8082/' },
-        ],
-        pollIntervalInMs: 10000,
-    }),
+    supergraphSdl: fs.readFileSync("/app/supergraph.graphql").toString(),
     buildService({name, url}) {
         return new RemoteGraphQLDataSource({
             url,
@@ -27,15 +23,21 @@ const gateway = new ApolloGateway({
     },
 });
 
-const server = new ApolloServer({
-    gateway,
-    subscriptions: false,
-    context: ({req}) => ({
-        headers: req.headers,
-    })
-});
+async function startApolloServer() {
+    const server = new ApolloServer({
+        gateway,
+        debug: true,
+        // Subscriptions are unsupported but planned for a future Gateway version.
+        subscriptions: false,
+    });
+    const { url } = await startStandaloneServer(server, {
+        context: ({req}) => ({
+            headers: req.headers,
+        }),
+        listen: { port: 8888 },
+    });
 
-server.listen({
-    host: '0.0.0.0',
-    port: 8080,
-});
+    console.log(`🚀  Server ready at ${url}`);
+}
+
+startApolloServer();

@@ -184,7 +184,7 @@ php -S localhost:8080 FlexibleGraphqlBundle/index.php
 Command for generate TypeRegistry
 
 ```shell
-php NoFramework/generate.php
+php NoFramework/generate_type_registry.php
 ```
 
 Run http server for handle GraphQL requests

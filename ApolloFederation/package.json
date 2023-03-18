@@ -3,9 +3,9 @@
   "description": "Apollo federation server",
   "private": true,
   "dependencies": {
-    "@apollo/gateway": "^2.0.5",
-    "apollo-server": "^3.9.0",
-    "graphql": "^16.5.0"
+    "@apollo/gateway": "^2.4.0",
+    "@apollo/server": "^4.5.0",
+    "graphql": "^16.6"
   },
   "scripts": {
     "start": "node index",

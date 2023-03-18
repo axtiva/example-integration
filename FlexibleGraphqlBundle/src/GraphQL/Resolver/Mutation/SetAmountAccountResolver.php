@@ -6,7 +6,6 @@ namespace App\GraphQL\Resolver\Mutation;
 use App\GraphQL\Mapper\EntityToGQLModel;
 use App\GraphQL\Model\AccountType;
 use App\Repository\AccountRepository;
-use Axtiva\FlexibleGraphql\Generator\Exception\NotImplementedResolver;
 use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use Axtiva\FlexibleGraphql\Resolver\ResolverInterface;

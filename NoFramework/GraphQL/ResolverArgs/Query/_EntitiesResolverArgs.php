@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace App\GraphQL\ResolverArgs\Query;
+namespace SelfWritten\GraphQL\ResolverArgs\Query;
 
 use Axtiva\FlexibleGraphql\Type\InputType;
 
@@ -10,7 +10,7 @@ use Axtiva\FlexibleGraphql\Type\InputType;
  * PHP representation of graphql field args of Query._entities
  * @property iterable $representations 
  */
-final class _entitiesResolverArgs extends InputType
+final class _EntitiesResolverArgs extends InputType
 {
     protected function decorate($name, $value)
     {
