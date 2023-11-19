@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "axtiva/flexible-graphql-php",
-            "version": "v2.0.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/axtiva/flexible-graphql-php.git",
-                "reference": "874b5a725bfddfc072f7de744120fe8dc190cbe9"
+                "reference": "dd12b1ac4af0c0ea0ed12688608797c4be645c80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/874b5a725bfddfc072f7de744120fe8dc190cbe9",
-                "reference": "874b5a725bfddfc072f7de744120fe8dc190cbe9",
+                "url": "https://api.github.com/repos/axtiva/flexible-graphql-php/zipball/dd12b1ac4af0c0ea0ed12688608797c4be645c80",
+                "reference": "dd12b1ac4af0c0ea0ed12688608797c4be645c80",
                 "shasum": ""
             },
             "require": {
@@ -48,9 +48,9 @@
             "description": "Schema SDL first lib for generate php code from graphql sdl to TypeRegistry with webonyx/graphql-php",
             "support": {
                 "issues": "https://github.com/axtiva/flexible-graphql-php/issues",
-                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v2.0.0"
+                "source": "https://github.com/axtiva/flexible-graphql-php/tree/v2.1.1"
             },
-            "time": "2023-03-19T21:21:58+00:00"
+            "time": "2023-11-19T18:05:52+00:00"
         },
         {
             "name": "myclabs/php-enum",
@@ -464,5 +464,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

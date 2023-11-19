@@ -119,8 +119,6 @@ class TypeRegistry
             'args' => ['input' => [
             'name' => 'input',
             'type' => function() { return Type::nonNull(function() { return $this->getType('ModInput'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'echo' => new FieldDefinition([
             'name' => 'echo',
@@ -141,8 +139,6 @@ class TypeRegistry
             'args' => ['input' => [
             'name' => 'input',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'print' => new FieldDefinition([
             'name' => 'print',
@@ -163,8 +159,6 @@ class TypeRegistry
             'args' => ['input' => [
             'name' => 'input',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'dayTime' => new FieldDefinition([
             'name' => 'dayTime',
@@ -178,8 +172,6 @@ class TypeRegistry
             'args' => ['timestamps' => [
             'name' => 'timestamps',
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('TimestampInput'); }); }); }); }); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'time' => new FieldDefinition([
             'name' => 'time',
@@ -211,8 +203,6 @@ class TypeRegistry
             'args' => ['id' => [
             'name' => 'id',
             'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'accounts' => new FieldDefinition([
             'name' => 'accounts',
@@ -246,8 +236,6 @@ class TypeRegistry
             'args' => ['representations' => [
             'name' => 'representations',
             'type' => function() { return Type::nonNull(function() { return new ListOfType(function() { return Type::nonNull(function() { return $this->getType('_Any'); }); }); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ])],
         ]);
@@ -272,13 +260,9 @@ class TypeRegistry
             'args' => ['idAccount' => [
             'name' => 'idAccount',
             'type' => function() { return Type::nonNull(function() { return Type::id(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],'amount' => [
             'name' => 'amount',
             'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ]),'createAccount' => new FieldDefinition([
             'name' => 'createAccount',
@@ -292,8 +276,6 @@ class TypeRegistry
             'args' => ['number' => [
             'name' => 'number',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]],
         ])],
         ]);
@@ -448,13 +430,9 @@ class TypeRegistry
         'description' =>  NULL,
         'fields' => fn() => ['x' => [
             'name' => 'x',
-            'description' => NULL,
-            'defaultValue' => NULL,
             'type' => Type::nonNull(function() { return Type::int(); }),
         ],'y' => [
             'name' => 'y',
-            'description' => NULL,
-            'defaultValue' => NULL,
             'type' => Type::nonNull(function() { return $this->getType('NotZeroInt'); }),
         ]],
         ]);
@@ -469,8 +447,6 @@ class TypeRegistry
         'description' =>  NULL,
         'fields' => fn() => ['ts' => [
             'name' => 'ts',
-            'description' => NULL,
-            'defaultValue' => NULL,
             'type' => Type::nonNull(function() { return Type::int(); }),
         ]],
         ]);
@@ -604,23 +580,15 @@ class TypeRegistry
                 [
             'name' => 'url',
             'type' => function() { return Type::string(); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],[
             'name' => 'as',
             'type' => function() { return Type::string(); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],[
             'name' => 'for',
             'type' => function() { return $this->getType('link__Purpose'); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],[
             'name' => 'import',
             'type' => function() { return new ListOfType(function() { return $this->getType('link__Import'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -664,8 +632,6 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -689,8 +655,6 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -714,13 +678,10 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],[
             'name' => 'resolvable',
             'type' => function() { return Type::boolean(); },
             'defaultValue' => true,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -784,8 +745,6 @@ class TypeRegistry
                 [
             'name' => 'from',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -849,8 +808,6 @@ class TypeRegistry
                 [
             'name' => 'ex',
             'type' => function() { return Type::nonNull(function() { return Type::int(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -894,8 +851,6 @@ class TypeRegistry
                 [
             'name' => 'role',
             'type' => function() { return Type::string(); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -919,8 +874,6 @@ class TypeRegistry
                 [
             'name' => 'name',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -944,8 +897,6 @@ class TypeRegistry
                 [
             'name' => 'name',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -1009,8 +960,6 @@ class TypeRegistry
                 [
             'name' => 'from',
             'type' => function() { return Type::nonNull(function() { return Type::string(); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -1054,8 +1003,6 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -1079,8 +1026,6 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ]
             ],
         ]);
@@ -1104,13 +1049,10 @@ class TypeRegistry
                 [
             'name' => 'fields',
             'type' => function() { return Type::nonNull(function() { return $this->getType('FieldSet'); }); },
-            'defaultValue' => NULL,
-            'description' => NULL,
         ],[
             'name' => 'resolvable',
             'type' => function() { return Type::boolean(); },
             'defaultValue' => true,
-            'description' => NULL,
         ]
             ],
         ]);
